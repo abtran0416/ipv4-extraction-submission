@@ -1,0 +1,305 @@
+Compiler: Apple clang version 16.0.0 (clang-1600.0.26.3)
+Flags: -std=c++17 -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -g
+Builds completed with warnings treated as errors.
+
+PASS 1: sample connecting
+  input: "connecting to 192.168.1.1 now"
+  expected: 1 3232235777 -1
+  actual:   1 3232235777 -1
+PASS 2: sample server port
+  input: "server=10.0.0.255:8080end"
+  expected: 1 167772415 8080
+  actual:   1 167772415 8080
+PASS 3: letter separates candidates
+  input: "192a168.1.1.1"
+  expected: 1 2818638081 -1
+  actual:   1 2818638081 -1
+PASS 4: sample trailing period
+  input: "192.168.1.1."
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 5: sample connection
+  input: "Connection from 192.168.1.1 refused"
+  expected: 1 3232235777 -1
+  actual:   1 3232235777 -1
+PASS 6: sample leading zero
+  input: "192.168.01.1"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 7: sample invalid port
+  input: "1.2.3.4:99999"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 8: sample three octets
+  input: "12.34.56"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 9: sample no address
+  input: "no number here"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 10: minimum address
+  input: "0.0.0.0"
+  expected: 1 0 -1
+  actual:   1 0 -1
+PASS 11: maximum address
+  input: "255.255.255.255"
+  expected: 1 4294967295 -1
+  actual:   1 4294967295 -1
+PASS 12: minimum port
+  input: "0.0.0.0:0"
+  expected: 1 0 0
+  actual:   1 0 0
+PASS 13: maximum address and port
+  input: "255.255.255.255:65535"
+  expected: 1 4294967295 65535
+  actual:   1 4294967295 65535
+PASS 14: ordinary address
+  input: "1.2.3.4"
+  expected: 1 16909060 -1
+  actual:   1 16909060 -1
+PASS 15: ordinary port
+  input: "1.2.3.4:80"
+  expected: 1 16909060 80
+  actual:   1 16909060 80
+PASS 16: port one
+  input: "1.2.3.4:1"
+  expected: 1 16909060 1
+  actual:   1 16909060 1
+PASS 17: four digit port
+  input: "1.2.3.4:9999"
+  expected: 1 16909060 9999
+  actual:   1 16909060 9999
+PASS 18: five digit port
+  input: "1.2.3.4:10000"
+  expected: 1 16909060 10000
+  actual:   1 16909060 10000
+PASS 19: port above limit
+  input: "1.2.3.4:65536"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 20: six digit port
+  input: "1.2.3.4:100000"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 21: empty port
+  input: "1.2.3.4:"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 22: port double zero
+  input: "1.2.3.4:00"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 23: port leading zero
+  input: "1.2.3.4:080"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 24: port leading zero at limit
+  input: "1.2.3.4:065535"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 25: first octet above limit
+  input: "256.2.3.4"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 26: second octet above limit
+  input: "1.256.3.4"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 27: third octet above limit
+  input: "1.2.256.4"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 28: fourth octet above limit
+  input: "1.2.3.256"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 29: first octet leading zero
+  input: "01.2.3.4"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 30: second octet leading zero
+  input: "1.02.3.4"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 31: third octet leading zero
+  input: "1.2.03.4"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 32: fourth octet leading zero
+  input: "1.2.3.04"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 33: zero octet repeated digits
+  input: "1.2.3.000"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 34: four digit first octet
+  input: "1234.2.3.4"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 35: four digit last octet
+  input: "1.2.3.1234"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 36: one octet
+  input: "192"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 37: two octets
+  input: "1.2"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 38: three octets
+  input: "1.2.3"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 39: five octets no prefix salvage
+  input: "1.2.3.4.5"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 40: invalid first octet no suffix salvage
+  input: "999.1.2.3.4"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 41: empty second octet
+  input: "1..2.3.4"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 42: empty third octet
+  input: "1.2..4"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 43: empty fourth octet
+  input: "1.2.3."
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 44: leading period
+  input: ".1.2.3.4"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 45: leading colon
+  input: ":1.2.3.4"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 46: misplaced colon
+  input: "1.2:3.4"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 47: two adjacent colons
+  input: "1.2.3.4::80"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 48: second colon after port
+  input: "1.2.3.4:80:90"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 49: trailing colon after port
+  input: "1.2.3.4:80:"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 50: period after port
+  input: "1.2.3.4:80."
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 51: decimal-looking port
+  input: "1.2.3.4:80.5"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 52: empty string
+  input: ""
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 53: spaces
+  input: "   "
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 54: punctuation only
+  input: "...:::..."
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 55: garbage separates octets
+  input: "1.2a3.4"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 56: surrounding garbage
+  input: "abc[1.2.3.4]xyz"
+  expected: 1 16909060 -1
+  actual:   1 16909060 -1
+PASS 57: letters after port
+  input: "abc1.2.3.4:80xyz"
+  expected: 1 16909060 80
+  actual:   1 16909060 80
+PASS 58: sign after colon leaves empty port
+  input: "1.2.3.4:-1"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 59: plus after colon leaves empty port
+  input: "1.2.3.4:+80"
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 60: punctuation as garbage separator
+  input: "1.2.3.4,"
+  expected: 1 16909060 -1
+  actual:   1 16909060 -1
+PASS 61: later address after bad port
+  input: "1.2.3.4:65536 x 8.8.8.8:53"
+  expected: 1 134744072 53
+  actual:   1 134744072 53
+PASS 62: later address after bad octet count
+  input: "1.2.3.4.5 x 8.8.8.8"
+  expected: 1 134744072 -1
+  actual:   1 134744072 -1
+PASS 63: later address after leading punctuation
+  input: ".1.2.3.4 x 8.8.8.8"
+  expected: 1 134744072 -1
+  actual:   1 134744072 -1
+PASS 64: multiple valid candidates use first
+  input: "1.2.3.4 x 8.8.8.8:53"
+  expected: 1 16909060 -1
+  actual:   1 16909060 -1
+PASS 65: letter separates port from later digits
+  input: "1.2.3.4:80a90"
+  expected: 1 16909060 80
+  actual:   1 16909060 80
+PASS 66: one million octet digits
+  input length: 1000006 (construction in tests.cpp)
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 67: one million port digits
+  input length: 1000008 (construction in tests.cpp)
+  expected: 0 0 -1
+  actual:   0 0 -1
+PASS 68: later address after huge candidate
+  input length: 1000010 (construction in tests.cpp)
+  expected: 1 134744072 -1
+  actual:   1 134744072 -1
+PASS 69: reused output variables
+  expected and checked: success 16909060 80; failure 0 -1; success 0 -1
+Function tests: 69/69 passed
+FAIL console: complete assignment sample
+  expected: "Enter a string (or 'END' to quit): Extracted IPv4 address: 192.168.1.1 (decimal value: 3232235777, port: none)\nEnter a string (or 'END' to quit): Extracted IPv4 address: 10.0.0.255 (decimal value: 167772415, port: 8080)\nEnter a string (or 'END' to quit): Extracted IPv4 address: 168.1.1.1 (decimal value: 2818638081, port: none)\nEnter a string (or 'END' to quit): Invalid input: no valid IPv4 address found\nEnter a string (or 'END' to quit): Extracted IPv4 address: 192.168.1.1 (decimal value: 3232235777, port: none)\nEnter a string (or 'END' to quit): Invalid input: no valid IPv4 address found\nEnter a string (or 'END' to quit): Invalid input: no valid IPv4 address found\nEnter a string (or 'END' to quit): Invalid input: no valid IPv4 address found\nEnter a string (or 'END' to quit): Invalid input: no valid IPv4 address found\nEnter a string (or 'END' to quit): Program terminated.\n"
+  actual:   'Enter a line: Extracted IPv4 address: 192.168.1.1 (decimal value: 3232235777, port: none)\nEnter a line: Extracted IPv4 address: 10.0.0.255 (decimal value: 167772415, port: 8080)\nEnter a line: Extracted IPv4 address: 168.1.1.1 (decimal value: 2818638081, port: none)\nEnter a line: Enter a line: Extracted IPv4 address: 192.168.1.1 (decimal value: 3232235777, port: none)\nEnter a line: Enter a line: Enter a line: Enter a line: Enter a line: Program terminated.\n'
+FAIL console: END terminates before later lines
+  expected: "Enter a string (or 'END' to quit): Program terminated.\n"
+  actual:   'Enter a line: Program terminated.\n'
+FAIL console: case and spaces are significant
+  expected: "Enter a string (or 'END' to quit): Invalid input: no valid IPv4 address found\nEnter a string (or 'END' to quit): Invalid input: no valid IPv4 address found\nEnter a string (or 'END' to quit): Invalid input: no valid IPv4 address found\nEnter a string (or 'END' to quit): Program terminated.\n"
+  actual:   'Enter a line: Enter a line: Enter a line: Enter a line: Program terminated.\n'
+FAIL console: empty input line then END
+  expected: "Enter a string (or 'END' to quit): Invalid input: no valid IPv4 address found\nEnter a string (or 'END' to quit): Program terminated.\n"
+  actual:   'Enter a line: Enter a line: Program terminated.\n'
+FAIL console: port zero prints zero
+  expected: "Enter a string (or 'END' to quit): Extracted IPv4 address: 1.2.3.4 (decimal value: 16909060, port: 0)\nEnter a string (or 'END' to quit): Program terminated.\n"
+  actual:   'Enter a line: Extracted IPv4 address: 1.2.3.4 (decimal value: 16909060, port: 0)\nEnter a line: Program terminated.\n'
+FAIL console: invalid port followed by separate address
+  expected: "Enter a string (or 'END' to quit): Extracted IPv4 address: 8.8.8.8 (decimal value: 134744072, port: 53)\nEnter a string (or 'END' to quit): Program terminated.\n"
+  actual:   'Enter a line: Extracted IPv4 address: 8.8.8.8 (decimal value: 134744072, port: 53)\nEnter a line: Program terminated.\n'
+FAIL console: immediate end of file
+  expected: "Enter a string (or 'END' to quit): Program terminated.\n"
+  actual:   'Enter a line: Program terminated.\n'
+FAIL console: last line without newline
+  expected: "Enter a string (or 'END' to quit): Extracted IPv4 address: 1.2.3.4 (decimal value: 16909060, port: none)\nEnter a string (or 'END' to quit): Program terminated.\n"
+  actual:   'Enter a line: Extracted IPv4 address: 1.2.3.4 (decimal value: 16909060, port: none)\nEnter a line: Program terminated.\n'
+Console tests: 0/8 passed
+FAIL: inspect the differences above

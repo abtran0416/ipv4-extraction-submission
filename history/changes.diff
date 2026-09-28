@@ -1,0 +1,75 @@
+--- original_main.cpp
++++ main.cpp
+@@ -130,11 +130,13 @@
+                  * 3 digits because more than 3 digits
+                  * automatically makes an octet invalid.
+                  */
+-                if (digitCount < 3)
++                if (digitCount == 3)
+                 {
+-                    value = value * 10
+-                            + (str[pos] - '0');
++                    valid = false;
++                    break;
+                 }
++
++                value = value * 10 + (str[pos] - '0');
+ 
+                 digitCount++;
+                 pos++;
+@@ -147,7 +149,7 @@
+              * value 0-255
+              * no leading zero unless the number is exactly 0
+              */
+-            if (digitCount > 3)
++            if (!valid)
+             {
+                 valid = false;
+                 break;
+@@ -241,12 +243,13 @@
+                          * We do not need to keep accumulating
+                          * after that.
+                          */
+-                        if (portDigits < 5)
++                        if (portDigits == 5)
+                         {
+-                            portValue =
+-                                portValue * 10
+-                                + (str[pos] - '0');
++                            valid = false;
++                            break;
+                         }
++
++                        portValue = portValue * 10 + (str[pos] - '0');
+ 
+                         portDigits++;
+                         pos++;
+@@ -259,7 +262,7 @@
+                      * value 0-65535
+                      * no leading zero unless exactly 0
+                      */
+-                    if (portDigits > 5)
++                    if (!valid)
+                     {
+                         valid = false;
+                     }
+@@ -328,7 +331,7 @@
+ 
+     while (true)
+     {
+-        cout << "Enter a line: ";
++        cout << "Enter a string (or 'END' to quit): ";
+         getline(cin, input);
+ 
+         // Stop if input ends unexpectedly.
+@@ -384,6 +387,10 @@
+ 
+             cout << ")" << endl;
+         }
++        else
++        {
++            cout << "Invalid input: no valid IPv4 address found" << endl;
++        }
+     }
+ 
+     cout << "Program terminated." << endl;
